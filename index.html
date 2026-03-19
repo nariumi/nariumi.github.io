@@ -1,214 +1,97 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nariumi Watanabe | Portfolio</title>
-    <style>
-        /* =========================================
-           基本モード（データ・理系らしいクリーンな画面）
-           ========================================= */
-        body {
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            background-color: #f4f7f6;
-            color: #2c3e50;
-            margin: 0;
-            padding: 0;
-            transition: background-color 0.6s ease, color 0.6s ease;
-            overflow-x: hidden;
-        }
+<script>
+        // 隠しコマンドの正解（コナミコマンド）
+        const secretCode = [
+            'ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 
+            'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 
+            'b', 'a'
+        ];
+        let inputSequence = [];
 
-        .container {
-            max-width: 800px;
-            margin: 80px auto;
-            padding: 0 20px;
-        }
-
-        /* 遊び心その1：フワッと浮くカード */
-        .card {
-            background: white;
-            border-radius: 16px;
-            padding: 2.5rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s;
-        }
-        .card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-        }
-
-        h1 { margin-top: 0; font-size: 2.5rem; }
-        h2 { border-bottom: 2px solid #e0e0e0; padding-bottom: 10px; margin-top: 0; }
-        
-        #subtitle {
-            color: #7f8c8d;
-            font-size: 1.2rem;
-            font-weight: bold;
-            transition: color 0.3s;
-        }
-
-        /* 遊び心その2：触ると暴れるスキルタグ */
-        .skills {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        .tag {
-            background: #e0e7ff;
-            color: #4338ca;
-            padding: 8px 16px;
-            border-radius: 30px;
-            font-weight: bold;
-            cursor: pointer;
-            display: inline-block;
-            transition: all 0.2s;
-        }
-        .tag:hover {
-            background: #4338ca;
-            color: white;
-            transform: scale(1.1) rotate(-3deg);
-        }
-
-        /* 右上の魔法のボタン */
-        .toggle-btn {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: #2c3e50;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 30px;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            transition: all 0.3s;
-            z-index: 1000;
-        }
-        .toggle-btn:hover {
-            transform: scale(1.05);
-        }
-
-        /* =========================================
-           お祭りモード（ボタンを押した後のデザイン）
-           ========================================= */
-        body.festival-mode {
-            background-color: #ffeaa7; /* ポップなイエロー */
-            color: #d35400;
-        }
-        body.festival-mode .card {
-            background: #fffdf7;
-            border: 3px dashed #fdcb6e;
-            box-shadow: 0 10px 30px rgba(211, 84, 0, 0.15);
-        }
-        body.festival-mode h2 {
-            border-bottom: 2px dashed #fdcb6e;
-            color: #e17055;
-        }
-        body.festival-mode #subtitle {
-            color: #e17055;
-        }
-        body.festival-mode .tag {
-            background: #fab1a0;
-            color: #d63031;
-        }
-        body.festival-mode .tag:hover {
-            background: #d63031;
-            color: white;
-            transform: scale(1.2) rotate(5deg);
-        }
-        body.festival-mode .toggle-btn {
-            background: #e17055;
-        }
-
-        /* 降ってくる絵文字のアニメーション */
-        .emoji {
-            position: fixed;
-            top: -50px;
-            font-size: 2.5rem;
-            animation: fall linear forwards;
-            pointer-events: none;
-            z-index: 999;
-        }
-        @keyframes fall {
-            to {
-                transform: translateY(110vh) rotate(360deg);
-            }
-        }
-    </style>
-</head>
-<body>
-
-    <button class="toggle-btn" onclick="toggleMode()" id="modeBtn">📊 Data Mode</button>
-
-    <div class="container">
-        <div class="card">
-            <h1>Nariumi Watanabe</h1>
-            <p id="subtitle">Analytics & Strategy</p>
-        </div>
-
-        <div class="card">
-            <h2>Experience</h2>
-            <p><strong>第60代 理工白門祭実行委員会</strong><br>
-            実行委員長として組織マネジメントおよび中長期戦略の立案を牽引。60周年に向けたクラウドファンディングプロジェクトなどを推進。</p>
-            <hr style="border:0; border-top:1px solid #eee; margin: 15px 0;">
-            <p><strong>株式会社Alumnote</strong><br>
-            イベントマーケティングおよびデータ分析インターン。FigmaやIntercomを活用し、データ駆動での集客課題解決を実行。</p>
-        </div>
-
-        <div class="card">
-            <h2>Skills</h2>
-            <div class="skills">
-                <span class="tag">Python</span>
-                <span class="tag">Machine Learning</span>
-                <span class="tag">Operations Research</span>
-                <span class="tag">Figma</span>
-                <span class="tag">Notion</span>
-                <span class="tag">簿記</span>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        function toggleMode() {
-            const body = document.body;
-            const btn = document.getElementById('modeBtn');
-            const sub = document.getElementById('subtitle');
+        document.addEventListener('keydown', function(e) {
+            // 入力されたキーを配列に追加
+            inputSequence.push(e.key);
             
-            // クラスを付け外ししてデザインを切り替える
-            body.classList.toggle('festival-mode');
-            
-            if(body.classList.contains('festival-mode')) {
-                // お祭りモードのテキストと絵文字
-                btn.innerHTML = "🎪 Festival Mode!";
-                sub.innerHTML = "第60回、最高のお祭りに！ 🐒";
-                createEmojis(['🎉', '🐒', '🍌', '✨', '🎈']);
-            } else {
-                // 通常モードに戻す
-                btn.innerHTML = "📊 Data Mode";
-                sub.innerHTML = "Analytics & Strategy";
+            // 正解の配列の長さ以上にキーが入力されたら、古いものを消す
+            if (inputSequence.length > secretCode.length) {
+                inputSequence.shift();
             }
-        }
 
-        // 絵文字を降らせる関数
-        function createEmojis(emojis) {
-            for(let i = 0; i < 30; i++) {
-                setTimeout(() => {
-                    const el = document.createElement('div');
-                    el.className = 'emoji';
-                    el.innerText = emojis[Math.floor(Math.random() * emojis.length)];
-                    el.style.left = Math.random() * 100 + 'vw';
-                    // 落ちるスピードをランダムに
-                    el.style.animationDuration = (Math.random() * 3 + 2) + 's';
-                    document.body.appendChild(el);
+            // 配列が一致したかチェック
+            if (inputSequence.join(',') === secretCode.join(',')) {
+                activateSecretMode();
+                inputSequence = []; // 発動後にリセット
+            }
+        });
+
+        // 隠しコマンド発動時の演出
+        function activateSecretMode() {
+            // ターミナル風の真っ黒な画面を生成
+            const terminal = document.createElement('div');
+            terminal.id = 'secret-terminal';
+            terminal.style.position = 'fixed';
+            terminal.style.top = '0';
+            terminal.style.left = '0';
+            terminal.style.width = '100vw';
+            terminal.style.height = '100vh';
+            terminal.style.backgroundColor = 'rgba(0, 0, 0, 0.95)';
+            terminal.style.color = '#00ff00'; /* ハッカー風の緑文字 */
+            terminal.style.fontFamily = 'monospace';
+            terminal.style.padding = '40px';
+            terminal.style.fontSize = '1.2rem';
+            terminal.style.zIndex = '9999';
+            terminal.style.boxSizing = 'border-box';
+            document.body.appendChild(terminal);
+
+            // 表示する極秘メッセージ
+            const messages = [
+                "> Initiating Python environment...",
+                "> Loading data models...",
+                "> Optimization successful.",
+                "> Executing HakuMonkey Protocol...",
+                "> 60th Anniversary sequence initiated. 🐒✨",
+                "> Welcome to the hidden area."
+            ];
+
+            let messageIndex = 0;
+
+            // 1行ずつ文字を打ち込むようなアニメーション
+            function typeWriter() {
+                if (messageIndex < messages.length) {
+                    const line = document.createElement('p');
+                    line.style.margin = '10px 0';
+                    terminal.appendChild(line);
                     
-                    // 落ちきったら要素を削除して軽くする
-                    setTimeout(() => el.remove(), 5000);
-                }, i * 150); // パラパラと降らせるために時間差をつける
+                    let charIndex = 0;
+                    const text = messages[messageIndex];
+                    
+                    const typing = setInterval(() => {
+                        line.textContent += text.charAt(charIndex);
+                        charIndex++;
+                        if (charIndex === text.length) {
+                            clearInterval(typing);
+                            messageIndex++;
+                            setTimeout(typeWriter, 500); // 次の行までの待機時間
+                        }
+                    }, 50); // 1文字打つスピード
+                } else {
+                    // 全て表示し終わったら、画面をクリックで閉じられるようにする
+                    const closeInstruction = document.createElement('p');
+                    closeInstruction.style.color = '#fff';
+                    closeInstruction.style.marginTop = '40px';
+                    closeInstruction.style.cursor = 'pointer';
+                    closeInstruction.textContent = "[Click anywhere to close terminal]";
+                    terminal.appendChild(closeInstruction);
+                    
+                    terminal.addEventListener('click', () => {
+                        terminal.style.transition = 'opacity 0.5s';
+                        terminal.style.opacity = '0';
+                        setTimeout(() => terminal.remove(), 500);
+                    });
+                }
             }
+
+            // アニメーション開始
+            typeWriter();
         }
     </script>
-</body>
-</html>
+    
